@@ -1,0 +1,16 @@
+venv
+data
+staticfiles
+
+# vscode
+.vscode
+
+# pycharm
+.idea
+*.iml
+*.ipr
+*.iws
+
+# db
+db.sqlite3
+postgresdatabase
