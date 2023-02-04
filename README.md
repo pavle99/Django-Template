@@ -2,7 +2,10 @@
 
 ## Description
 
-This is a template for Django projects with customized auth and users CRUD. 
+This is a template for Django projects with customized auth and users CRUD. The project is dockerized and uses postgresql as the database so it needs minimal adjustments to be used in production. The project is also configured to use gmail as the email backend so you can use it to send emails to users.
+
+## Features
+
 For auth, you have the following functionalities you can find in the `account` app:
 - Register
 - Login
