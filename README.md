@@ -4,7 +4,6 @@
 
 This is a template for Django projects with customized auth and users CRUD. 
 For auth, you have the following functionalities you can find in the `account` app:
- <!-- make list -->
 - Register
 - Login
 - Refresh token
@@ -12,6 +11,8 @@ For auth, you have the following functionalities you can find in the `account` a
 - Change password
 - Forgot password
 - Set password
+
+I have setup CORS headers for the APIs so that you can access them from the frontend. You can change the allowed origins with the `CORS_ALLOWED_ORIGINS` variable.
 
 For users CRUD, you have the following functionalities you can find in the `users` app:
 - List all users
@@ -27,6 +28,8 @@ I have also added a `utils` app that contains the following functionalities:
 
 - Send email when user forgot password or when user is created using the `set_password.html` template. You need to provide the `EMAIL_HOST_USER` and `EMAIL_HOST_PASSWORD` in the `docker-compose.yml` file and switch to smtp email backend in the `settings.py` file if you want to test the email functionality using gmail. You can get EMAIL_HOST_PASSWORD from [here](https://myaccount.google.com/apppasswords).
 - File to base64 and base64 to file conversion. You can use it to convert the avatar image to base64 and vice versa.
+
+I have also added Swagger documentation for the APIs. You can access it at `http://localhost:9000/docs/` after running the project.
 
 ## Development
 
