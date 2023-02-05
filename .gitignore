@@ -4,8 +4,13 @@
 *.pyc
 __pycache__
 db.sqlite3
-media
 staticfiles
+# dont ignore images inside media subfolder profile_avatars that have test_avatar in the name
+media/*
+!media/profile_avatars
+media/profile_avatars/*
+!media/profile_avatars/test_avatar*
+
 
 # Backup files # 
 *.bak 

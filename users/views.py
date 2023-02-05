@@ -6,12 +6,10 @@ from rest_framework.response import Response
 from users.models import Profile
 from users.serializers import ProfileSerializer, AvatarSerializer
 
-import base64
-
 from utils.b64 import base64_to_file
 
 
-class UserList(generics.ListCreateAPIView):
+class UserListView(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
@@ -32,7 +30,7 @@ class UserList(generics.ListCreateAPIView):
         )
 
 
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     http_method_names = ["get", "patch", "delete"]
@@ -78,11 +76,12 @@ class UploadAvatarView(generics.UpdateAPIView):
 
     @swagger_auto_schema(tags=["Users"], operation_summary="Upload an avatar")
     def patch(self, request, *args, **kwargs):
-        user = User.objects.filter(pk=kwargs.get("pk")).first()
-        if user is None:
-            return Response({"detail": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
-        if request.user.is_staff or request.user == user:
-            return self.partial_update(request, *args, **kwargs)
+        if request.user.is_staff:
+            user = User.objects.filter(pk=kwargs.get("pk")).first()
+            if user is None:
+                return Response({"detail": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            if request.user.is_staff or request.user == user:
+                return self.partial_update(request, *args, **kwargs)
         return Response(
             {"detail": "You do not have permission to perform this action"}, status=status.HTTP_403_FORBIDDEN
         )

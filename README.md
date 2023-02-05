@@ -92,3 +92,22 @@ python manage.py runserver 9000
 ```
 
 The default database in venv development is **sqlite3**.
+
+## Testing
+
+I have already added the complete test cases suit for the `account` and `users` apps with 100% coverage. You can run the tests by entering the following command:
+```bash
+python manage.py test [app_names]
+coverage run manage.py test [app_names]
+```
+
+To get the coverage report, you can run the following command:
+```bash
+coverage report
+```
+
+To get the coverage report in html format, you can run the following command:
+```bash
+coverage html
+```
+And then open the `index.html` file in the `htmlcov` folder.

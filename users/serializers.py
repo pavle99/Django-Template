@@ -15,16 +15,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    # Uncomment this field to get the avatar as base64 if frontend needs it
-    # avatar_base64 = serializers.SerializerMethodField()
+    # Comment this field if frontend does not need the avatar as base64
+    avatar_base64 = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
         fields = "__all__"
 
-    # Uncomment this method to get the avatar as base64 if frontend needs it
-    # def get_avatar_base64(self, profile):
-    #     return file_to_base64(profile.avatar) if profile.avatar else ""
+    # Comment this field if frontend does not need the avatar as base64
+    def get_avatar_base64(self, profile):
+        return file_to_base64(profile.avatar) if profile.avatar else ""
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
