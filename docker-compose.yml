@@ -2,38 +2,35 @@ version: "3.9"
 
 services:
   db:
-    image: postgres
+    image: postgres:15-alpine
     container_name: db
     restart: always
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_USER: django_template
+      POSTGRES_PASSWORD: django_template
+      POSTGRES_DB: django_template_dev
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
   app:
     build: .
     container_name: app
     restart: always
-    command: ./docker-entrypoint.sh
     volumes:
-      - .:/code
+      - .:/usr/src/app
     ports:
       - "9000:9000"
+    env_file:
+      - .env.dev
     depends_on:
-      - db
-    environment:
-      DJANGO_SUPERUSER_EMAIL: admin@admin.com 
-      DJANGO_SUPERUSER_USERNAME: admin
-      DJANGO_SUPERUSER_PASSWORD: admin
-      EMAIL_HOST_USER: your@email.com
-      EMAIL_HOST_PASSWORD: your_password
-      SECRET_KEY: h^z13$qr_s_wd65@gnj7a=xs7t05$w7q8!x_8zsld#
-      FRONTEND_URL: http://localhost:3000
-      DB_ENGINE: django.db.backends.postgresql
-      DB_NAME: postgres
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_HOST: db
-      DB_PORT: 5432
-      DEBUG: False
+      db:
+        condition: service_healthy
+
+
+volumes:
+  postgres_data:

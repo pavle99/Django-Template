@@ -38,7 +38,7 @@ I have also added Swagger documentation for the APIs. You can access it at `http
 
 ### Development via Docker
 
-To run the project locally, you need to have `docker` and `docker-compose` installed on your machine. Before starting the docker containers, you need to provide the EMAIL_HOST_USER and EMAIL_HOST_PASSWORD in the `docker-compose.yml` file and switch to smtp email backend in the `settings.py` file.
+To run the project locally, you need to have `docker` and `docker-compose` installed on your machine. Before starting the docker containers, you need to provide the EMAIL_HOST_USER and EMAIL_HOST_PASSWORD in the `.env.dev` file and switch to smtp email backend in the `settings.py` file.
 
 Now, you can run the following commands:
 ```bash
@@ -53,6 +53,13 @@ password: admin
 ```
 
 The default database in dockerized development is **postgresql**.
+
+[//]: # (every time the docker compose starts it will give migrations)
+On each start of the docker containers, the migrations are applied. If you want to apply migrations manually, you can run the following commands:
+```bash
+docker-compose -f docker-compose.yml exec web python manage.py makemigrations
+docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
+```
 
 ### Development via Virtual Environment
 
