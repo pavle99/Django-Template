@@ -116,3 +116,9 @@ To get the coverage report in html format, you can run the following command:
 coverage html
 ```
 And then open the `index.html` file in the `htmlcov` folder.
+
+## Production & Deployment
+
+To deploy this application, use the `deploy-entrypoint.sh` file and edit it if needed. You also need to provide the `DATABASE_URL` environment variable and set `DEBUG` to `False`. You can also use the `docker-compose.prod.yml` file to deploy the application using docker. I have setup WhiteNoise to serve static files in production. You can also use Nginx to serve static files.
+
+You can check the deployed version of this project at [https://djangotemplate.onrender.com](https://djangotemplate.onrender.com).
