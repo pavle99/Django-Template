@@ -54,10 +54,15 @@ password: admin
 
 The default database in dockerized development is **postgresql**.
 
+**NOTE**: When adding new apps, you need to add them `docker-entrypoint.sh` file in the `makemigrations` command so that the migrations are applied on each start of the docker containers since the migrations folder of each app is initially empty. You can find the following line in the `docker-entrypoint.sh` file:
+```bash
+python manage.py makemigrations account users [new_app_names]
+```
+
 [//]: # (every time the docker compose starts it will give migrations)
 On each start of the docker containers, the migrations are applied. If you want to apply migrations manually, you can run the following commands:
 ```bash
-docker-compose -f docker-compose.yml exec web python manage.py makemigrations
+docker-compose -f docker-compose.yml exec web python manage.py makemigrations [app_names]
 docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
 ```
 
