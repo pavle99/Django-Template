@@ -6,6 +6,8 @@ from rest_framework_simplejwt.serializers import (
     TokenRefreshSerializer,
 )
 
+from users.models import Profile
+
 
 class LoginSerializer(TokenObtainPairSerializer):
     default_error_messages = {"no_active_account": "Invalid credentials!"}
@@ -42,7 +44,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "username", "email", "first_name", "last_name")
+        fields = ("id", "username", "email", "first_name", "last_name", "is_staff")
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        profile = Profile.objects.get(user=instance)
+        ret["avatar"] = profile.avatar.url if profile.avatar else ""
+        return ret
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -52,6 +60,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class ForgotPasswordSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
+
 
 class SetPasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(required=True)

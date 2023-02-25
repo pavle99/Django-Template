@@ -9,15 +9,15 @@ def send_set_password_email(user):
     token = default_token_generator.make_token(user)
     set_password_url = settings.FRONTEND_URL + "?token=" + token + "&email=" + user.email
     context = {
-        'user': user,
+        "user": user,
         "set_password_url": set_password_url,
     }
-    message = render_to_string('set_password.html', context)
+    message = render_to_string("set_password.html", context)
 
     email = EmailMessage(
-        subject='Set Password',
+        subject="Set Password",
         body=message,
-        from_email='from@example.com',
+        from_email="from@example.com",
         to=[user.email],
     )
     email.content_subtype = "html"

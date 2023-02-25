@@ -4,8 +4,15 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 
-from .serializers import AccountSerializer, LoginSerializer, RefreshTokenSerializer, RegisterSerializer, \
-    ChangePasswordSerializer, ForgotPasswordSerializer, SetPasswordSerializer
+from .serializers import (
+    AccountSerializer,
+    LoginSerializer,
+    RefreshTokenSerializer,
+    RegisterSerializer,
+    ChangePasswordSerializer,
+    ForgotPasswordSerializer,
+    SetPasswordSerializer,
+)
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from utils.mail import send_set_password_email
@@ -44,7 +51,7 @@ class RegisterView(generics.CreateAPIView):
             return Response({"detail": "User already exists"}, status=status.HTTP_409_CONFLICT)
 
         user = User.objects.create_user(
-            username=username, email=email, password=password, first_name=first_name, last_name=last_name
+            username=username, email=email, password=password, first_name=first_name, last_name=last_name, is_staff=True
         )
         user.save()
 

@@ -24,7 +24,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     # Comment this field if frontend does not need the avatar as base64
     def get_avatar_base64(self, profile):
+        # check if file exists
         return file_to_base64(profile.avatar) if profile.avatar else ""
+
+    def to_representation(self, instance):
+        # flatten the user object
+        ret = super().to_representation(instance)
+        ret.update(ret.pop("user"))
+        return ret
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
@@ -37,6 +44,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         profile.save()
 
         return profile
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user")
+        user = instance.user
+        user.__dict__.update(user_data)
+        user.save()
+
+        instance.__dict__.update(validated_data)
+        instance.save()
+
+        return instance
 
 
 class AvatarSerializer(serializers.ModelSerializer):

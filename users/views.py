@@ -1,7 +1,8 @@
 from django.contrib.auth.models import User
 from drf_yasg.utils import swagger_auto_schema
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.response import Response
+from init_users import init_users
 
 from users.models import Profile
 from users.serializers import ProfileSerializer, AvatarSerializer
@@ -42,12 +43,18 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=["Users"], operation_summary="Update a user")
     def patch(self, request, *args, **kwargs):
         user = User.objects.filter(pk=kwargs.get("pk")).first()
+        if request.data["user"]["username"] == user.username:
+            request.data["user"].pop("username")
         if user is None:
             return Response({"detail": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
         if request.user.is_staff or request.user == user:
-            avatar = request.data.get("avatar", "")
-            if avatar:
-                request.data["avatar"] = base64_to_file(avatar)
+            avatar_base_64 = request.data.get("avatar_base_64", "")
+            if avatar_base_64 is not None:
+                if len(avatar_base_64) == 0:
+                    user.profile.avatar = None
+                    user.save()
+                else:
+                    request.data["avatar"] = base64_to_file(avatar_base_64)
             return self.partial_update(request, *args, **kwargs)
         return Response(
             {"detail": "You do not have permission to perform this action"}, status=status.HTTP_403_FORBIDDEN
@@ -85,3 +92,13 @@ class UploadAvatarView(generics.UpdateAPIView):
         return Response(
             {"detail": "You do not have permission to perform this action"}, status=status.HTTP_403_FORBIDDEN
         )
+
+
+class InitializeUsersView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
+
+    @swagger_auto_schema(tags=["Users"], operation_summary="Initialize users")
+    def post(self, request, *args, **kwargs):
+
+        init_users()
+        return Response(status=status.HTTP_200_OK, data=User.objects.all().values())
