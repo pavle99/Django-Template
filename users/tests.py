@@ -89,7 +89,7 @@ class UserListViewTestCase(GlobalTestSetup):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]["user"]["username"], self.user.username)
+        self.assertEqual(response.data[0]["username"], self.user.username)
         self.assertEqual(response.data[0]["bio"], self.user.profile.bio)
         self.assertEqual(response.data[0]["location"], self.user.profile.location)
         self.assertEqual(response.data[0]["birth_date"], self.user.profile.birth_date)
@@ -103,7 +103,7 @@ class UserListViewTestCase(GlobalTestSetup):
 
         response = self.client.post(self.url, self.create_user_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data["user"]["username"], self.create_user_data["user"]["username"])
+        self.assertEqual(response.data["username"], self.create_user_data["user"]["username"])
         self.assertEqual(response.data["bio"], self.create_user_data["bio"])
         self.assertEqual(response.data["location"], self.create_user_data["location"])
         self.assertEqual(response.data["birth_date"], self.create_user_data["birth_date"])
@@ -175,7 +175,7 @@ class UserDetailViewTestCase(GlobalTestSetup):
         inject_token(self.client)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["user"]["username"], self.new_user.username)
+        self.assertEqual(response.data["username"], self.new_user.username)
         self.assertEqual(response.data["bio"], self.new_user.profile.bio)
         self.assertEqual(response.data["location"], self.new_user.profile.location)
         self.assertEqual(response.data["birth_date"], self.new_user.profile.birth_date)
@@ -214,14 +214,14 @@ class UserDetailViewTestCase(GlobalTestSetup):
         inject_token(self.client)
 
         self.update_user_data[
-            "avatar"
-        ] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
+            "avatar_base_64"
+        ] = "data:reserved_test_avatar_64/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAApgAAAKYB3X3/OAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAANCSURBVEiJtZZPbBtFFMZ/M7ubXdtdb1xSFyeilBapySVU8h8OoFaooFSqiihIVIpQBKci6KEg9Q6H9kovIHoCIVQJJCKE1ENFjnAgcaSGC6rEnxBwA04Tx43t2FnvDAfjkNibxgHxnWb2e/u992bee7tCa00YFsffekFY+nUzFtjW0LrvjRXrCDIAaPLlW0nHL0SsZtVoaF98mLrx3pdhOqLtYPHChahZcYYO7KvPFxvRl5XPp1sN3adWiD1ZAqD6XYK1b/dvE5IWryTt2udLFedwc1+9kLp+vbbpoDh+6TklxBeAi9TL0taeWpdmZzQDry0AcO+jQ12RyohqqoYoo8RDwJrU+qXkjWtfi8Xxt58BdQuwQs9qC/afLwCw8tnQbqYAPsgxE1S6F3EAIXux2oQFKm0ihMsOF71dHYx+f3NND68ghCu1YIoePPQN1pGRABkJ6Bus96CutRZMydTl+TvuiRW1m3n0eDl0vRPcEysqdXn+jsQPsrHMquGeXEaY4Yk4wxWcY5V/9scqOMOVUFthatyTy8QyqwZ+kDURKoMWxNKr2EeqVKcTNOajqKoBgOE28U4tdQl5p5bwCw7BWquaZSzAPlwjlithJtp3pTImSqQRrb2Z8PHGigD4RZuNX6JYj6wj7O4TFLbCO/Mn/m8R+h6rYSUb3ekokRY6f/YukArN979jcW+V/S8g0eT/N3VN3kTqWbQ428m9/8k0P/1aIhF36PccEl6EhOcAUCrXKZXXWS3XKd2vc/TRBG9O5ELC17MmWubD2nKhUKZa26Ba2+D3P+4/MNCFwg59oWVeYhkzgN/JDR8deKBoD7Y+ljEjGZ0sosXVTvbc6RHirr2reNy1OXd6pJsQ+gqjk8VWFYmHrwBzW/n+uMPFiRwHB2I7ih8ciHFxIkd/3Omk5tCDV1t+2nNu5sxxpDFNx+huNhVT3/zMDz8usXC3ddaHBj1GHj/As08fwTS7Kt1HBTmyN29vdwAw+/wbwLVOJ3uAD1wi/dUH7Qei66PfyuRj4Ik9is+hglfbkbfR3cnZm7chlUWLdwmprtCohX4HUtlOcQjLYCu+fzGJH2QRKvP3UNz8bWk1qMxjGTOMThZ3kvgLI5AzFfo379UAAAAASUVORK5CYII="
         response = self.client.patch(self.url, self.update_user_data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["bio"], self.update_user_data["bio"])
         self.assertEqual(response.data["location"], self.update_user_data["location"])
         self.assertEqual(response.data["birth_date"], self.update_user_data["birth_date"])
-        self.assertEqual(response.data["avatar"], "http://testserver/media/profile_avatars/image.png")
+        self.assertEqual(response.data["avatar"], "http://testserver/media/profile_avatars/reserved_test_avatar_64.png")
 
     def test_update_user_with_invalid_pk(self):
         inject_token(self.client)
@@ -276,7 +276,7 @@ class UploadAvatarViewTest(GlobalTestSetup):
     def setUp(self):
         super().setUp(url="upload-avatar", url_kwargs={"pk": 1})
         self.avatar = SimpleUploadedFile(
-            name="image.png",
+            name="reserved_test_image.png",
             content=open("media/profile_avatars/test_avatar.jpg", "rb").read(),
             content_type="image/jpg",
         )
@@ -291,7 +291,7 @@ class UploadAvatarViewTest(GlobalTestSetup):
         inject_token(self.client)
         response = self.client.patch(self.url, {"avatar": self.avatar}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["avatar"], "http://testserver/media/profile_avatars/image.png")
+        self.assertEqual(response.data["avatar"], "http://testserver/media/profile_avatars/reserved_test_image.png")
 
     def test_upload_avatar_with_invalid_pk(self):
         inject_token(self.client)

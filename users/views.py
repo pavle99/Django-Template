@@ -43,7 +43,11 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     @swagger_auto_schema(tags=["Users"], operation_summary="Update a user")
     def patch(self, request, *args, **kwargs):
         user = User.objects.filter(pk=kwargs.get("pk")).first()
-        if request.data["user"]["username"] == user.username:
+        if (
+            "user" in request.data
+            and "username" in request.data["user"]
+            and request.data["user"]["username"] == user.username
+        ):
             request.data["user"].pop("username")
         if user is None:
             return Response({"detail": "User does not exist"}, status=status.HTTP_404_NOT_FOUND)
